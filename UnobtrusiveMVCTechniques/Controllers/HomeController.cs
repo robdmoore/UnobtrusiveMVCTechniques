@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
+using DataAnnotationsExtensions;
 
 namespace UnobtrusiveMVCTechniques.Controllers
 {
@@ -33,6 +34,14 @@ namespace UnobtrusiveMVCTechniques.Controllers
 
         [RegularExpression(@"\w")]
         public string RegexOneWordChar { get; set; }
+        #endregion
+
+        #region DataAnnotationsExtensions
+        [Email]
+        public string Email { get; set; }
+
+        [Url]
+        public string Url { get; set; }
         #endregion
     }
 }

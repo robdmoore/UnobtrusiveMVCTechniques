@@ -1,0 +1,15 @@
+**/obj
+**/bin
+**/deploy
+**/deploy/*
+_ReSharper.*
+**/*.csproj.user
+*.ReSharper.user
+*.ReSharper
+*.suo
+**/*.cache
+~$*
+*~
+*.log
+NuGet/*.*
+**/*.snk

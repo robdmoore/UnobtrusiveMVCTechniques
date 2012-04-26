@@ -16,6 +16,12 @@ namespace UnobtrusiveMVCTechniques.Controllers
         #endregion
 
         #region 1. Custom validation code in controller
+        public ActionResult CustomCodeInController()
+        {
+            return View("ValidationTest");
+        }
+
+        [HttpPost]
         public ActionResult CustomCodeInController(ViewModel1 vm)
         {
             if (!ModelState.IsValid)

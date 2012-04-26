@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
 using UnobtrusiveMVCTechniques.Repositories;
 
@@ -66,6 +67,31 @@ namespace UnobtrusiveMVCTechniques.Controllers
         }
         #endregion
 
+        #region 3. Get default model binder to call the validation code before the controller action
+        public ActionResult ValidationAlreadyCalled()
+        {
+            return View("ValidationTest");
+        }
+
+        [HttpPost]
+        public ActionResult ValidationAlreadyCalled(ViewModel3 vm)
+        {
+            if (!ModelState.IsValid)
+                return View("ValidationTest", vm);
+
+            ViewBag.Success = true;
+            return View("ValidationTest");
+        }
+        public class ViewModel3 : TestViewModel, IValidatableObject
+        {
+            public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+            {
+                var userRepository = DependencyResolver.Current.GetService<IUserRepository>(); // Yuck!
+                if (userRepository.GetUserByUserName(UserName) != null)
+                    yield return new ValidationResult("That username is already taken; please try another username.", new [] {"UserName"});
+            }
+        }
+        #endregion
     }
 
     public class TestViewModel

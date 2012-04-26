@@ -1,5 +1,9 @@
-﻿using System.Web.Mvc;
+﻿using System.Reflection;
+using System.Web.Mvc;
 using System.Web.Routing;
+using Autofac;
+using Autofac.Integration.Mvc;
+using UnobtrusiveMVCTechniques.Repositories;
 
 namespace UnobtrusiveMVCTechniques
 {
@@ -28,6 +32,14 @@ namespace UnobtrusiveMVCTechniques
 
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
+
+            var builder = new ContainerBuilder();
+
+            builder.RegisterControllers(Assembly.GetExecutingAssembly());
+            builder.RegisterType<UserRepository>().AsImplementedInterfaces();
+
+            var container = builder.Build();
+            DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
         }
     }
 }

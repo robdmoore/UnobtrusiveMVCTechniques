@@ -8,11 +8,16 @@ namespace UnobtrusiveMVCTechniques.Controllers
     {
         public ActionResult Index()
         {
+            return View();
+        }
+
+        public ActionResult ValidationExample()
+        {
             return View(new SomeViewModel());
         }
 
         [HttpPost]
-        public ActionResult Index(SomeViewModel vm)
+        public ActionResult ValidationExample(SomeViewModel vm)
         {
             if (!ModelState.IsValid)
                 return View(vm);

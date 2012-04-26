@@ -1,0 +1,23 @@
+﻿@using UnobtrusiveMVCTechniques.Helpers
+@model UnobtrusiveMVCTechniques.Controllers.SomeViewModel
+
+@{
+    ViewBag.Title = "Validation Example - Unobtrusive MVC Techniques";
+}
+
+<h1>Validation Example</h1>
+
+@if (ViewBag.Success != null)
+{
+    <p>Action successfully performed!</p>
+}
+
+@using (Html.BeginForm())
+{
+    @Html.OutputField(m => m.Integer)
+    @Html.OutputField(m => m.Required)
+    @Html.OutputField(m => m.RegexOneWordChar)
+    @Html.OutputField(m => m.Email)
+    @Html.OutputField(m => m.Url)
+    <input type="submit" value="Submit" />
+}

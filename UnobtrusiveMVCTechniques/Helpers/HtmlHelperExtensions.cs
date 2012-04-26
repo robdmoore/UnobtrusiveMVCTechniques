@@ -27,6 +27,7 @@ namespace UnobtrusiveMVCTechniques.Helpers
             s.Append(htmlHelper.TextBoxFor(field));
             s.Append("<br />");
             s.Append(htmlHelper.ValidationMessageFor(field));
+            s.Append("</p>\r\n");
 
             return new HtmlString(s.ToString());
         }

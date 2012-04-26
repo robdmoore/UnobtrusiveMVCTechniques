@@ -39,6 +39,33 @@ namespace UnobtrusiveMVCTechniques.Controllers
         public class ViewModel1 : TestViewModel { }
         #endregion
 
+        #region 2. Modularised custom validation code called from controller
+        public ActionResult ModularisedCustomCodeCalledFromController()
+        {
+            return View("ValidationTest");
+        }
+
+        [HttpPost]
+        public ActionResult ModularisedCustomCodeCalledFromController(ViewModel2 vm)
+        {
+            if (!ModelState.IsValid || !vm.Validate(ModelState, _userRepository))
+                return View("ValidationTest", vm);
+
+            ViewBag.Success = true;
+            return View("ValidationTest");
+        }
+        public class ViewModel2 : TestViewModel
+        {
+            public bool Validate(ModelStateDictionary modelState, IUserRepository userRepository)
+            {
+                if (userRepository.GetUserByUserName(UserName) != null)
+                    modelState.AddModelError("UserName", "That username is already taken; please try another username."); // In reality you would try not to use magic strings here
+
+                return modelState.IsValid;
+            }
+        }
+        #endregion
+
     }
 
     public class TestViewModel

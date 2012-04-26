@@ -6,8 +6,12 @@
 
 <h1>Unobtrusive MVC Techniques</h1>
 
+<h2>Unobtrusive Validation Example</h2>
 <p>@Html.ActionLink("Unobtrusive Validation Example", "ValidationExample")</p>
 
+<h2>Custom Validation Approaches Comparison</h2>
+<p>For the following they will validate that username is required and that the username isn't taken (the only "taken" username in this case is "dummy")</p>
 <ol>
     <li>@Html.ActionLink("Custom validation code in controller", "CustomCodeInController", "CustomValidation")</li>
+    <li>@Html.ActionLink("Modularised custom validation code called from controller", "ModularisedCustomCodeCalledFromController", "CustomValidation")</li>
 </ol>

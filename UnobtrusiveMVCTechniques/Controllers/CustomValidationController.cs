@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Web.Mvc;
+using FluentValidation;
 using UnobtrusiveMVCTechniques.Repositories;
+using ValidationContext = System.ComponentModel.DataAnnotations.ValidationContext;
 
 namespace UnobtrusiveMVCTechniques.Controllers
 {
@@ -92,6 +95,49 @@ namespace UnobtrusiveMVCTechniques.Controllers
             }
         }
         #endregion
+
+        #region 4. Introduce a validation library
+        public ActionResult FluentValidation()
+        {
+            return View("ValidationTest");
+        }
+
+        [HttpPost]
+        public ActionResult FluentValidation(ViewModel4 vm)
+        {
+            if (!ModelState.IsValid)
+                return View("ValidationTest", vm);
+
+            ViewBag.Success = true;
+            return View("ValidationTest");
+        }
+        public class ViewModel4 : TestViewModel, IValidatableObject
+        {
+            public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+            {
+                var validationResult = new ViewModel4Validator().Validate(this); // Yuck!
+                if (!validationResult.IsValid)
+                {
+                    return validationResult.Errors.ToList().Select(e => new ValidationResult(e.ErrorMessage, new[] { e.PropertyName }));
+                }
+                return new List<ValidationResult>();
+            }
+        }
+        public class ViewModel4Validator : AbstractValidator<ViewModel4>
+        {
+            public ViewModel4Validator()
+            {
+                RuleFor(x => x.UserName).Must(BeAUniqueUserName).WithMessage("That username is already taken; please try another username.");
+            }
+
+            public bool BeAUniqueUserName(string userName)
+            {
+                var userRepository = DependencyResolver.Current.GetService<IUserRepository>(); // Yuck!
+                return userRepository.GetUserByUserName(userName) == null;
+            }
+        }
+        #endregion
+
     }
 
     public class TestViewModel

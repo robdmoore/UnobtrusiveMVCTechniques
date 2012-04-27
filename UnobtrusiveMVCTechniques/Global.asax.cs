@@ -5,7 +5,7 @@ using Autofac;
 using Autofac.Integration.Mvc;
 using FluentValidation;
 using FluentValidation.Mvc;
-using UnobtrusiveMVCTechniques.Controllers;
+using UnobtrusiveMVCTechniques.Config.Autofac;
 using UnobtrusiveMVCTechniques.Repositories;
 
 namespace UnobtrusiveMVCTechniques
@@ -40,7 +40,7 @@ namespace UnobtrusiveMVCTechniques
 
             builder.RegisterControllers(Assembly.GetExecutingAssembly());
             builder.RegisterType<UserRepository>().AsImplementedInterfaces();
-            builder.RegisterModule<CustomValidationController.FluentValidatorModule>();
+            builder.RegisterModule<FluentValidatorModule>();
 
             var container = builder.Build();
             DependencyResolver.SetResolver(new AutofacDependencyResolver(container));

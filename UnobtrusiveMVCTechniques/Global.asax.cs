@@ -3,6 +3,7 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using Autofac;
 using Autofac.Integration.Mvc;
+using FluentValidation.Mvc;
 using UnobtrusiveMVCTechniques.Repositories;
 
 namespace UnobtrusiveMVCTechniques
@@ -40,6 +41,8 @@ namespace UnobtrusiveMVCTechniques
 
             var container = builder.Build();
             DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
+
+            FluentValidationModelValidatorProvider.Configure();
         }
     }
 }

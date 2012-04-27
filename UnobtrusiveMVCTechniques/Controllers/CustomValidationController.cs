@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using FluentValidation;
 using UnobtrusiveMVCTechniques.Repositories;
 using ValidationContext = System.ComponentModel.DataAnnotations.ValidationContext;
+using Validator = FluentValidation.Attributes.ValidatorAttribute;
 
 namespace UnobtrusiveMVCTechniques.Controllers
 {
@@ -138,6 +139,38 @@ namespace UnobtrusiveMVCTechniques.Controllers
         }
         #endregion
 
+        #region 5. Use ModelValidatorProvider
+        // Note: Requires FluentValidationModelValidatorProvider.Configure(); in Application_Start() in Global.asax.cs
+        public ActionResult ModelValidatorProvider()
+        {
+            return View("ValidationTest");
+        }
+
+        [HttpPost]
+        public ActionResult ModelValidatorProvider(ViewModel5 vm)
+        {
+            if (!ModelState.IsValid)
+                return View("ValidationTest", vm);
+
+            ViewBag.Success = true;
+            return View("ValidationTest");
+        }
+        [Validator(typeof(ViewModel5Validator))]
+        public class ViewModel5 : TestViewModel {}
+        public class ViewModel5Validator : AbstractValidator<ViewModel5>
+        {
+            public ViewModel5Validator()
+            {
+                RuleFor(x => x.UserName).Must(BeAUniqueUserName).WithMessage("That username is already taken; please try another username.");
+            }
+
+            public bool BeAUniqueUserName(string userName)
+            {
+                var userRepository = DependencyResolver.Current.GetService<IUserRepository>(); // Yuck!
+                return userRepository.GetUserByUserName(userName) == null;
+            }
+        }
+        #endregion
     }
 
     public class TestViewModel

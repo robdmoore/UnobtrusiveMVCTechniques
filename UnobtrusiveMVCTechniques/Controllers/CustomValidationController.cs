@@ -215,6 +215,7 @@ namespace UnobtrusiveMVCTechniques.Controllers
                 builder.RegisterType<AutofacValidatorFactory>().As<IValidatorFactory>().SingleInstance();
 
                 var validators = AssemblyScanner.FindValidatorsInAssembly(Assembly.GetExecutingAssembly());
+                // There are three different options for the scoping of the next line of code; see https://github.com/robdmoore/UnobtrusiveMVCTechniques/issues/1
                 validators.ToList().ForEach(v => builder.RegisterType(v.ValidatorType).As(v.InterfaceType).InstancePerDependency());
             }
         }
